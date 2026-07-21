@@ -20,7 +20,7 @@ from playwright.async_api import BrowserContext, Page, Route, async_playwright
 # =========================
 # CẤU HÌNH
 # =========================
-TARGET_URL = "https://live03.chuoichientv.me/"
+TARGET_URL = "https://live04.chuoichientv.me/"
 PLAYER_ORIGIN_FALLBACK = "https://live.chuoichien.tv"
 OUTPUT_M3U = "chuoichien_live.m3u"
 OUTPUT_PIPE_M3U = "chuoichien_live_pipe.m3u"
@@ -1361,7 +1361,7 @@ async def main() -> None:
     print(f"🥷 KHỞI ĐỘNG CHUỐI CHIÊN STREAM SCANNER - {SCANNER_VERSION}", flush=True)
     print(
         "ℹ️ Test riêng một trận:\n"
-        '   python main.py "https://live03.chuoichientv.me/live/1524177/capalaba-vs-holland-park-hawks"'
+        '   python main.py "https://live04.chuoichientv.me/live/1567360/dalian-kewei-vs-beijing-guoan"'
     )
     print(
         f"ℹ️ Chế độ quét: {'FULL toàn bộ thời gian' if FULL_SCAN else 'dừng sớm'} | "
