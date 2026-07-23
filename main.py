@@ -20,14 +20,14 @@ from playwright.async_api import BrowserContext, Page, Route, async_playwright
 # =========================
 # CẤU HÌNH
 # =========================
-TARGET_URL = "https://live04.chuoichientv.me/"
-PLAYER_ORIGIN_FALLBACK = "https://live.chuoichien.tv"
+TARGET_URL = "https://phaohoa1.live/"
+PLAYER_ORIGIN_FALLBACK = "https://phaohoa.live"
 OUTPUT_M3U = "chuoichien_live.m3u"
 OUTPUT_PIPE_M3U = "chuoichien_live_pipe.m3u"
 OUTPUT_VLC_M3U = "chuoichien_live_vlc.m3u"
 OUTPUT_DEBUG = "chuoichien_debug.json"
-OUTPUT_HOME_DEBUG_HTML = "chuoichien_home_debug.html"
-OUTPUT_HOME_DEBUG_PNG = "chuoichien_home_debug.png"
+OUTPUT_HOME_DEBUG_HTML = "phaohoa_home_debug.html"
+OUTPUT_HOME_DEBUG_PNG = "phaohoa_home_debug.png"
 SCANNER_VERSION = "3.4-UNIVERSAL-RAW-URL-HEADERS"
 
 
