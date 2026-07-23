@@ -22,7 +22,7 @@ from playwright.async_api import BrowserContext, Page, Route, async_playwright
 # =========================
 TARGET_URL = "https://phaohoa1.live/"
 PLAYER_ORIGIN_FALLBACK = "https://phaohoa.live"
-OUTPUT_M3U = "chuoichien_live.m3u"
+OUTPUT_M3U = "phaohoa_live.m3u"
 OUTPUT_PIPE_M3U = "phaohoa_live_pipe.m3u"
 OUTPUT_VLC_M3U = "phaohoa_live_vlc.m3u"
 OUTPUT_DEBUG = "phaohoa_debug.json"
