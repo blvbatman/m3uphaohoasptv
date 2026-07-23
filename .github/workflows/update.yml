@@ -7,7 +7,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: chuoichien-m3u-${{ github.ref }}
+  group: phaohoa-m3u-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -41,70 +41,70 @@ jobs:
           SOCOLIVE_FULL_SCAN: "1"
         run: |
           set -o pipefail
-          python -u main.py 2>&1 | tee chuoichien_scan.log
+          python -u main.py 2>&1 | tee phaohoa_scan.log
 
       - name: 5. Kiểm tra playlist và nhóm thể thao
         shell: bash
         run: |
-          test -f chuoichien_live.m3u
-          test -f chuoichien_live_pipe.m3u
-          test -f chuoichien_live_vlc.m3u
+          test -f phaohoa_live.m3u
+          test -f phaohoa_live_pipe.m3u
+          test -f phaohoa_live_vlc.m3u
 
           echo "--- Android TV: 80 dòng đầu ---"
-          sed -n '1,80p' chuoichien_live.m3u
+          sed -n '1,80p' phaohoa_live.m3u
           echo "--- Pipe/Kodi: 40 dòng đầu ---"
-          sed -n '1,40p' chuoichien_live_pipe.m3u
+          sed -n '1,40p' phaohoa_live_pipe.m3u
           echo "--- VLC: 60 dòng đầu ---"
-          sed -n '1,60p' chuoichien_live_vlc.m3u
+          sed -n '1,60p' phaohoa_live_vlc.m3u
 
-          invalid_groups="$(grep '^#EXTINF' chuoichien_live.m3u | grep -Ev 'group-title="(Bóng đá|Bóng rổ|Bóng chuyền|Tennis|Esports|Khác)"' || true)"
+          invalid_groups="$(grep '^#EXTINF' phaohoa_live.m3u | grep -Ev 'group-title="(Bóng đá|Bóng rổ|Bóng chuyền|Tennis|Esports|Khác)"' || true)"
           if [ -n "$invalid_groups" ]; then
             echo "::error::Có kênh thiếu group-title hợp lệ."
             printf '%s\n' "$invalid_groups"
             exit 1
           fi
 
-          if grep -E '^https?://.*\|User-Agent=' chuoichien_live.m3u; then
+          if grep -E '^https?://.*\|User-Agent=' phaohoa_live.m3u; then
             echo "::error::Playlist mặc định không được nối pipe headers vào URL."
             exit 1
           fi
 
-          if grep -Eq '^https?://.*\.(m3u8|flv)(\?.*)?$' chuoichien_live.m3u; then
-            grep -q '^#EXTHTTP:{"User-Agent":' chuoichien_live.m3u || {
+          if grep -Eq '^https?://.*\.(m3u8|flv)(\?.*)?$' phaohoa_live.m3u; then
+            grep -q '^#EXTHTTP:{"User-Agent":' phaohoa_live.m3u || {
               echo "::error::Playlist mặc định thiếu EXTHTTP User-Agent/Referer."; exit 1;
             }
-            grep -q '^#EXTVLCOPT:http-referrer=https://live.chuoichien.tv/' chuoichien_live.m3u || {
+            grep -q '^#EXTVLCOPT:http-referrer=https://live.phaohoa.tv/' phaohoa_live.m3u || {
               echo "::error::Playlist mặc định thiếu http-referrer."; exit 1;
             }
-            grep -q '^#EXTVLCOPT:http-user-agent=Mozilla/5.0 ' chuoichien_live.m3u || {
+            grep -q '^#EXTVLCOPT:http-user-agent=Mozilla/5.0 ' phaohoa_live.m3u || {
               echo "::error::Playlist mặc định thiếu http-user-agent."; exit 1;
             }
             echo "Playlist mặc định URL nguyên bản + header tags: OK"
           fi
 
-          if grep -Eq '\.(m3u8|flv)[^|]*\|User-Agent=.*&Referer=' chuoichien_live_pipe.m3u; then
+          if grep -Eq '\.(m3u8|flv)[^|]*\|User-Agent=.*&Referer=' phaohoa_live_pipe.m3u; then
             echo "Playlist pipe/Kodi: OK"
-          elif grep -Eq '\.(m3u8|flv)(\?|$)' chuoichien_live_pipe.m3u; then
+          elif grep -Eq '\.(m3u8|flv)(\?|$)' phaohoa_live_pipe.m3u; then
             echo "::error::Playlist pipe có stream nhưng thiếu protocol options."
             exit 1
           fi
 
-          if grep -E '^https?://.*\|User-Agent=' chuoichien_live_vlc.m3u; then
+          if grep -E '^https?://.*\|User-Agent=' phaohoa_live_vlc.m3u; then
             echo "::error::Playlist VLC không được chứa pipe headers."
             exit 1
           fi
 
-          if grep -Eq '\.(m3u8|flv)(\?|$)' chuoichien_live_vlc.m3u; then
-            grep -q '^#EXTVLCOPT:http-referrer=https://live.chuoichien.tv/' chuoichien_live_vlc.m3u || {
+          if grep -Eq '\.(m3u8|flv)(\?|$)' phaohoa_live_vlc.m3u; then
+            grep -q '^#EXTVLCOPT:http-referrer=https://phaohoa1.live/' phaohoa_live_vlc.m3u || {
               echo "::error::Playlist VLC thiếu Referer."; exit 1;
             }
-            grep -q '^#EXTVLCOPT:http-user-agent=Mozilla/5.0 ' chuoichien_live_vlc.m3u || {
+            grep -q '^#EXTVLCOPT:http-user-agent=Mozilla/5.0 ' phaohoa_live_vlc.m3u || {
               echo "::error::Playlist VLC thiếu User-Agent."; exit 1;
             }
           fi
 
           echo "--- Thống kê thư mục ---"
-          grep '^#EXTINF' chuoichien_live.m3u \
+          grep '^#EXTINF' phaohoa_live.m3u \
             | sed -n 's/.*group-title="\([^"]*\)".*/\1/p' \
             | sort | uniq -c || true
 
@@ -112,15 +112,15 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: chuoichien-debug-${{ github.run_id }}
+          name: phaohoa-debug-${{ github.run_id }}
           path: |
-            chuoichien_live.m3u
-            chuoichien_live_pipe.m3u
-            chuoichien_live_vlc.m3u
-            chuoichien_debug.json
-            chuoichien_scan.log
-            chuoichien_home_debug.html
-            chuoichien_home_debug.png
+            phaohoa_live.m3u
+            phaohoa_live_pipe.m3u
+            phaohoa_live_vlc.m3u
+            phaohoa_debug.json
+            phaohoa_scan.log
+            phaohoa_home_debug.html
+            phaohoa_home_debug.png
           if-no-files-found: ignore
           retention-days: 3
 
@@ -130,7 +130,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add -- chuoichien_live.m3u chuoichien_live_pipe.m3u chuoichien_live_vlc.m3u
+          git add -- phaohoa_live.m3u phaohoa_live_pipe.m3u phaohoa_live_vlc.m3u
           if git diff --cached --quiet; then
             echo "Playlist không thay đổi; không cần commit."
             exit 0
